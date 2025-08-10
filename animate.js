@@ -1,21 +1,53 @@
 // Canvas
 const canvas = document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');
-const canvaswidth = canvas.width = 300;
-const canvasheight = canvas.height = 300;
+const CANVAS_WIDTH = canvas.width = 300;
+const CANVAS_HEIGHT = canvas.height = 300;
 
 // Spritesheet
-
 const spritesheet = new Image();
 spritesheet.src = "./spritesheets/shadow_dog.png";
 const spriteWidth = 575;
 const spriteHeight = 523;
 
-// Animation
+// Animation variables
+let x = 0; // sprite sheet x position
+let y = 3; // sprite sheet y position (row)
+let dx = 0; // canvas x position
+let dy = 0; // canvas y position
+let dWidth = spriteWidth / 10; // sprite width on canvas
+let dHeight = spriteHeight / 10; // sprite height on canvas
+
 function animate() {
-    ctx.clearRect(0, 0, canvaswidth, canvasheight);
-    ctx.drawimage(spritesheet, 0, 0, spriteWidth, spriteHeight, 0, 0, 200, 200);
-    ctx.drawimage(spritesheet, 4*spriteWidth, 0, spriteWidth, spriteHeight, 0, 0, 200, 200);
+    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    
+    // Draw the sprite at current position
+    ctx.drawImage(
+        spritesheet, 
+        x * spriteWidth, 
+        y * spriteHeight, 
+        spriteWidth, 
+        spriteHeight, 
+        dx, 
+        dy, 
+        dWidth, 
+        dHeight
+    );
+    
+    // Select next sprite in the row
+    if (x < 8) x++;
+    else x = 0;
+    
+    // Move sprite to the right
+    dx += 2;
+    
+    // If sprite goes off the right side of canvas, reset to left side
+    if (dx > CANVAS_WIDTH) {
+        dx = -dWidth; // Start slightly off-screen to the left
+    }
+    
     requestAnimationFrame(animate);
-}   
+}
+
+// Start animation
 animate();
