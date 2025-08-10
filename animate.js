@@ -18,36 +18,53 @@ let dy = 0; // canvas y position
 let dWidth = spriteWidth / 10; // sprite width on canvas
 let dHeight = spriteHeight / 10; // sprite height on canvas
 
-function animate() {
-    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    
-    // Draw the sprite at current position
-    ctx.drawImage(
-        spritesheet, 
-        x * spriteWidth, 
-        y * spriteHeight, 
-        spriteWidth, 
-        spriteHeight, 
-        dx, 
-        dy, 
-        dWidth, 
-        dHeight
-    );
-    
-    // Select next sprite in the row
-    if (x < 8) x++;
-    else x = 0;
-    
-    // Move sprite to the right
-    dx += 2;
-    
-    // If sprite goes off the right side of canvas, reset to left side
-    if (dx > CANVAS_WIDTH) {
-        dx = -dWidth; // Start slightly off-screen to the left
-    }
-    
+// FPS control variables
+let fps = 60; // desired frames per second
+let frameInterval = 1000 / fps; // milliseconds between frames
+let frameTimer = 0;
+let lastTime = 0;
+
+function animate(currentTime) {
     requestAnimationFrame(animate);
+    
+    // Calculate delta time
+    const deltaTime = currentTime - lastTime;
+    lastTime = currentTime;
+    
+    // Skip frame if not enough time has passed
+    if (frameTimer > frameInterval) {
+        ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        
+        // Draw the sprite at current position
+        ctx.drawImage(
+            spritesheet, 
+            x * spriteWidth, 
+            y * spriteHeight, 
+            spriteWidth, 
+            spriteHeight, 
+            dx, 
+            dy, 
+            dWidth, 
+            dHeight
+        );
+        
+        // Select next sprite in the row
+        if (x < 8) x++;
+        else x = 0;
+        
+        // Move sprite to the right
+        dx += 2;
+        
+        // If sprite goes off the right side of canvas, reset to left side
+        if (dx > CANVAS_WIDTH) {
+            dx = -dWidth;
+        }
+        
+        frameTimer = 0;
+    } else {
+        frameTimer += deltaTime;
+    }
 }
 
 // Start animation
-animate();
+requestAnimationFrame(animate);
