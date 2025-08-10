@@ -1,8 +1,17 @@
 // Canvas
 const canvas = document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');
-const CANVAS_WIDTH = canvas.width = 300;
-const CANVAS_HEIGHT = canvas.height = 300;
+const CANVAS_WIDTH = canvas.width = 600;
+const CANVAS_HEIGHT = canvas.height = 700;
+
+let x4 = 0; // Layer 4 x position
+const BG_WIDTH = 2400; // Background width
+const BG_HEIGHT = 700; // Background height
+const bgSpeedLayer4 = 6; // Speed of layer 4
+
+// Background image
+const bgLayer4 = new Image();
+bgLayer4.src = "./background/layer-4.png";
 
 // Spritesheet
 const spritesheet = new Image();
@@ -47,6 +56,12 @@ function animate(currentTime) {
             dWidth, 
             dHeight
         );
+
+        // Draw background layer 4
+        ctx.drawImage(bgLayer4, x4, 0,); // Draw layer 4 background
+        ctx.drawImage(bgLayer4, x4 + BG_WIDTH, 0); // Draw second instance for seamless scrolling
+        x4 -= bgSpeedLayer4; // Move layer 4 to the left
+        if(x4 < -BG_WIDTH) x4 += BG_WIDTH; // Reset position when it goes off screen
         
         // Select next sprite in the row
         if (x < 8) x++;
