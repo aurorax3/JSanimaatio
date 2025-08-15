@@ -123,8 +123,6 @@ function resetGame() {
 
     // Reset block
     newBlock();
-
-    // Optionally reset other game state variables if needed
 }
 
 function animate(currentTime) {
